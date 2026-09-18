@@ -1,0 +1,24 @@
+{
+  "name": "orderpulse-postgres-orders",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "orderpulse",
+    "database.password": "orderpulse",
+    "database.dbname": "commerce",
+    "topic.prefix": "orderpulse",
+    "table.include.list": "public.orders",
+    "plugin.name": "pgoutput",
+    "slot.name": "orderpulse_orders",
+    "publication.autocreate.mode": "filtered",
+    "snapshot.mode": "initial",
+    "tombstones.on.delete": "false",
+    "decimal.handling.mode": "string",
+    "time.precision.mode": "connect",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
