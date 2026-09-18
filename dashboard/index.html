@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrderPulse Control Room</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">CDC DATA PLATFORM / LOCAL CONTROL ROOM</p>
+        <h1>OrderPulse</h1>
+        <p class="subtitle">From database changes to trusted analytics—with failures made visible.</p>
+      </div>
+      <div class="health-card">
+        <span class="pulse"></span>
+        <div>
+          <p>PIPELINE HEALTH</p>
+          <strong id="health">Loading</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="flow" aria-label="Data pipeline stages">
+      <article><span>01</span><small>SOURCE</small><strong>PostgreSQL</strong><p>Operational orders</p></article>
+      <i>→</i>
+      <article><span>02</span><small>CHANGE LOG</small><strong>Debezium + Kafka</strong><p>Immutable CDC events</p></article>
+      <i>→</i>
+      <article><span>03</span><small>COMPUTE</small><strong>PySpark</strong><p>Validate, dedupe, watermark</p></article>
+      <i>→</i>
+      <article><span>04</span><small>SERVE</small><strong>Silver + Gold</strong><p>Trusted data products</p></article>
+    </section>
+
+    <section class="metrics">
+      <article><small>BRONZE EVENTS</small><strong id="bronze-count">—</strong><p>Raw and replayable</p></article>
+      <article><small>SILVER ORDERS</small><strong id="silver-count">—</strong><p>Valid current state</p></article>
+      <article><small>GOLD WINDOWS</small><strong id="gold-count">—</strong><p>Business aggregates</p></article>
+      <article class="danger"><small>QUARANTINED</small><strong id="quarantine-count">—</strong><p>Never silently dropped</p></article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">SERVICE LEVEL OBJECTIVES</p><h2>Trust signals</h2></div>
+          <span id="generated-at" class="timestamp"></span>
+        </div>
+        <div id="slo-list" class="slo-list"></div>
+        <p class="note">The demo injects a duplicate, a late event, and an invalid amount. Red signals prove that controls detect failure.</p>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div><p class="eyebrow">GOLD DATA PRODUCT</p><h2>Order value by minute</h2></div>
+        </div>
+        <div id="gold-bars" class="bars"></div>
+      </article>
+    </section>
+
+    <section class="panel records-panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">DEAD-LETTER / QUARANTINE</p><h2>Rejected records</h2></div>
+        <span class="tag">AUDITABLE</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Event</th><th>Order</th><th>Reason</th></tr></thead>
+          <tbody id="quarantine-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <span>Contract v1</span><span>10-minute watermark</span><span>Deterministic replay</span><span>CI tested</span>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
